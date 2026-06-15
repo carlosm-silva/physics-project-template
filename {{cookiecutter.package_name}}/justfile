@@ -1,9 +1,12 @@
 # justfile — common tasks for {{cookiecutter.project_name}}
 # Run `just` or `just --list` to see all available recipes.
 
-# set up the conda environment and install pre-commit hooks
+# set up the conda environment, git repo, and pre-commit hooks
 bootstrap:
     conda env create -f environment.yml
+    git init
+    git add .
+    git commit -m "feat: initial project structure from template"
     conda run -n {{cookiecutter.package_name}} pre-commit install
     @echo "Done. Activate with: conda activate {{cookiecutter.package_name}}"
 
