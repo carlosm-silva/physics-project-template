@@ -1,8 +1,6 @@
 # justfile — common tasks for {{cookiecutter.project_name}}
 # Run `just` or `just --list` to see all available recipes.
 
-package := "{{cookiecutter.package_name}}"
-
 # set up the conda environment and install pre-commit hooks
 bootstrap:
     conda env create -f environment.yml
@@ -19,7 +17,7 @@ check:
     ruff check .
     ruff format --check .
     mypy src/
-    pytest --cov=src/{{package}} --cov-report=term-missing
+    pytest --cov=src/{{cookiecutter.package_name}} --cov-report=term-missing
 
 # auto-fix all ruff issues then format
 fix:
@@ -28,7 +26,7 @@ fix:
 
 # run tests only (faster feedback loop during development)
 test *args:
-    pytest {{args}}
+    pytest {{"{{"}}args{{"}}"}}
 
 # serve docs locally with live reload
 docs:
@@ -36,7 +34,7 @@ docs:
 
 # create a timestamped run directory and launch a simulation
 run config:
-    python scripts/run_simulation.py --config configs/{{config}}.toml
+    python scripts/run_simulation.py --config configs/{{"{{"}}config{{"}}"}}.toml
 
 # remove all generated outputs (leaves paper/figures intact)
 clean:
