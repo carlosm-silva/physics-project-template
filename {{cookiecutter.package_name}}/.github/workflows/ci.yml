@@ -60,4 +60,4 @@ jobs:
 
       - name: MkDocs build
         shell: bash -el {0}
-        run: mkdocs build --strict --config-file docs/mkdocs.yml
+        run: mkdocs build --strict
