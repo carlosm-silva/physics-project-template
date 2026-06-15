@@ -234,11 +234,11 @@ exclude_lines = [
 # Canonical docstring example:
 #
 #   def hamiltonian(q: np.ndarray, p: np.ndarray) -> float:
-#       r"""Compute the classical Hamiltonian :math:`H(q, p)`.
+#       r"""Compute the classical Hamiltonian $H(q, p)$.
 #
-#       .. math::
-#
-#           H(q, p) = \frac{p^2}{2m} + V(q)
+#       $$
+#       H(q, p) = \frac{p^2}{2m} + V(q)
+#       $$
 #
 #       Parameters
 #       ----------
@@ -255,5 +255,5 @@ exclude_lines = [
 #       Notes
 #       -----
 #       Assumes SI units throughout.  For atomic units set ``m = 1``
-#       and rescale :math:`V`.
+#       and rescale $V$.
 #       """
