@@ -7,6 +7,11 @@ cookiecutter gh:carlosm-silva/physics-project-template
 cd {{cookiecutter.package_name}}
 just bootstrap
 conda activate {{cookiecutter.package_name}}
+
+# one-time setup — enable GitHub Pages on the new repo. Wait for the docs workflow to complete
+gh api repos/carlosm-silva/{{cookiecutter.package_name}}/pages \
+  --method POST \
+  --field source='{"branch":"gh-pages","path":"/"}'
 ```
 
 ## Common tasks
