@@ -1,14 +1,12 @@
 """Shared type aliases for {{cookiecutter.project_name}}.
 
-Import exclusively under TYPE_CHECKING to avoid runtime cost.
+Other modules import from here with:
+    from test_physics_repo._typing import ArrayLike, NDArray
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    import numpy as np
-    from numpy.typing import ArrayLike, NDArray
+import numpy as np
+from numpy.typing import ArrayLike, NDArray
 
 __all__ = ["ArrayLike", "NDArray", "np"]

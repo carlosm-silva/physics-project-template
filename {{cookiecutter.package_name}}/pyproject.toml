@@ -167,6 +167,11 @@ module = [
 ignore_missing_imports = true
 disallow_untyped_defs  = false   # These libraries often lack complete stubs
 
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_decorators = false
+
+
 # ==============================================================================
 # PYTEST
 # ==============================================================================
@@ -196,6 +201,7 @@ branch = true
 omit   = [
     "src/**/conftest.py",
     "src/**/__main__.py",
+    "src/**/_typing.py",    # pure re-export module, no logic to test
     "scripts/*",
 ]
 
