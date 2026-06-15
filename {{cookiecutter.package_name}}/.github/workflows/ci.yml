@@ -18,7 +18,7 @@ jobs:
       - name: Set up conda environment
         uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: ${{ env.CONDA_ENV }}
+          activate-environment: ${{"{{"}} env.CONDA_ENV {{"}}"}}
           environment-file: environment.yml
           auto-activate-base: false
           miniforge-version: latest
@@ -48,7 +48,7 @@ jobs:
       - name: Set up conda environment
         uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: ${{ env.CONDA_ENV }}
+          activate-environment: ${{"{{"}} env.CONDA_ENV {{"}}"}}
           environment-file: environment.yml
           auto-activate-base: false
           miniforge-version: latest
