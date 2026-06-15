@@ -12,4 +12,5 @@ def identity(x: np.ndarray) -> np.ndarray:
     r"""Return the input array unchanged.
     ...
     """
+    
     return x

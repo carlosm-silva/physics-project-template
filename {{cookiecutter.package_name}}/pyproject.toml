@@ -95,17 +95,15 @@ select = [
 
 ignore = [
     # ---- type annotation relaxations ----------------------------------------
-    "ANN101",  # self never needs a type hint
-    "ANN102",  # cls  never needs a type hint
-    "ANN401",  # Allow Any — necessary for generic scientific code (np.ndarray, etc.)
+    "ANN401",  # Allow Any — necessary for generic scientific code
 
     # ---- docstring relaxations for NumPy convention -------------------------
-    "D100",    # Module-level docstrings are optional (too noisy for scripts)
-    "D203",    # "1 blank line before class docstring" — CONFLICTS with D211 (NumPy uses D211)
-    "D213",    # "Multi-line summary on second line"   — CONFLICTS with D212 (NumPy uses D212)
+    "D100",
+    "D203",
+    "D213",
 
     # ---- stylistic noise ----------------------------------------------------
-    "E501",    # Line-too-long is handled by the formatter, not the linter
+    "E501",
 ]
 
 # Allow auto-fix for all fixable rules except the ones that produce surprises
