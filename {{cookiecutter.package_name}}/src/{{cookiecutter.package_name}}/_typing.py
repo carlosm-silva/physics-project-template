@@ -11,4 +11,4 @@ if TYPE_CHECKING:
     import numpy as np
     from numpy.typing import ArrayLike, NDArray
 
-__all__: list[str] = []
+__all__ = ["ArrayLike", "NDArray", "np"]

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from {{cookiecutter.package_name}}.core.example import identity
 
