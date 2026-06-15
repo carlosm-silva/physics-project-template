@@ -15,7 +15,13 @@ gh repo create {{cookiecutter.package_name}} --public --source=. --push
 # one-time setup — enable GitHub Pages on the new repo. Wait for the docs workflow to complete
 gh api repos/carlosm-silva/{{cookiecutter.package_name}}/pages \
   --method POST \
-  --field source='{"branch":"gh-pages","path":"/"}'
+  --field 'source[branch]=gh-pages' \
+  --field 'source[path]=/'
+```
+
+After a successful run, the docs will be visible at:
+```
+https://carlosm-silva.github.io/{{cookiecutter.package_name}}/
 ```
 
 ## Common tasks

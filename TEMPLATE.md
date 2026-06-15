@@ -13,12 +13,18 @@ just check
 gh repo create your-project-name --public --source=. --push
 
 # one-time setup — enable GitHub Pages on the new repo. Wait for the docs workflow to complete
-gh api repos/carlosm-silva/your-project-name/pages \
+gh api repos/carlosm-silva/your_project_name/pages \
   --method POST \
-  --field source='{"branch":"gh-pages","path":"/"}'
+  --field 'source[branch]=gh-pages' \
+  --field 'source[path]=/'
 ```
 
 After the first push, CI runs automatically and docs deploy to GitHub Pages.
+
+After a successful run, the docs will be visible at:
+```
+https://carlosm-silva.github.io/your_project_name/
+```
 
 ---
 
