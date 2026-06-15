@@ -1,0 +1,9 @@
+outputs/
+*.h5
+*.fits
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+dist/
+*.egg-info/
+.ipynb_checkpoints/

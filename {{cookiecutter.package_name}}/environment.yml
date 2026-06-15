@@ -1,0 +1,18 @@
+name: {{cookiecutter.package_name}}
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python={{cookiecutter.python_version}}
+  - hdf5=1.14
+  {%- if cookiecutter.use_mpi == 'y' %}
+  - openmpi=4.1
+  - mpi4py>=3.1
+  {%- endif %}
+  - numpy>=1.26
+  - scipy>=1.13
+  - uv
+  - pip
+  - pip:
+      - -e ".[dev]"
+  # ── agent-added dependencies (staging area — review then promote above) ────
