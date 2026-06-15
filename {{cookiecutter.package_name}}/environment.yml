@@ -14,5 +14,5 @@ dependencies:
   - uv
   - pip
   - pip:
-      - -e ".[dev]"
+      - -e .
   # ── agent-added dependencies (staging area — review then promote above) ────
