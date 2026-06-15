@@ -5,7 +5,7 @@ A cookiecutter template for physics / data science projects.
 ## Usage
 
 ```bash
-cookiecutter gh:yourusername/physics-project-template
+cookiecutter gh:carlosm-silva/physics-project-template
 ```
 
 ## What gets generated
