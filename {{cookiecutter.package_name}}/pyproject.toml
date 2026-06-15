@@ -1,10 +1,12 @@
 # ==============================================================================
 # pyproject.toml — Python Style Contract
-# Physics / Data Science Projects
+# {{cookiecutter.project_name}}
 # ==============================================================================
 # Toolchain: Ruff · mypy · pytest · coverage · MkDocs Material + mkdocstrings
+# Build backend: hatchling (src/ layout; no setup.py)
+# Environment: conda-first via environment.yml; pip deps declared here
 # Docstring convention: NumPy (raw strings for LaTeX-heavy content)
-# Target runtime: CPython 3.11+
+# Target runtime: CPython {{cookiecutter.python_version}}+
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -15,35 +17,66 @@ requires      = ["hatchling"]
 build-backend = "hatchling.build"
 
 # ------------------------------------------------------------------------------
-# PROJECT METADATA  (fill in per-repo)
+# HATCHLING — src/ layout declaration
+# ------------------------------------------------------------------------------
+# Placed immediately after [build-system] to ensure Jinja2 renders it reliably.
+# Without this, hatchling cannot locate the package under src/ and pip install
+# fails with "Unable to determine which files to ship inside the wheel".
+[tool.hatch.build.targets.wheel]
+packages = ["src/{{cookiecutter.package_name}}"]
+
+# ------------------------------------------------------------------------------
+# PROJECT METADATA
 # ------------------------------------------------------------------------------
 [project]
-name            = "your-project-name"
+name            = "{{cookiecutter.package_name}}"
 version         = "0.1.0"
-description     = "A rigorous physics / data-science project."
+description     = "{{cookiecutter.project_name}}"
 readme          = "README.md"
-requires-python = ">=3.11"
+requires-python = ">={{cookiecutter.python_version}}"
 license         = { text = "MIT" }
+authors         = [{ name = "{{cookiecutter.author}}" }]
+
+# Runtime dependencies — pip-installable Python packages only.
+# System-level compiled deps (HDF5, OpenMPI, FFTW) belong in environment.yml;
+# conda manages those. This list is the single source of truth for pip/uv.
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.13",
+    "h5py>=3.10",
+    "astropy>=6.0",      # remove if not working with FITS / astronomical data
+    "matplotlib>=3.8",
+]
+
+# Optional dependency groups — install with: pip install -e ".[dev]" or ".[docs]"
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "mypy>=1.10",
+    "ruff>=0.4",
+    "pre-commit>=3.7",
+    "types-PyYAML",      # stub package so mypy can type-check PyYAML imports
+]
+docs = [
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.25",
+    "mkdocs-gen-files>=0.5",
+]
 
 # ==============================================================================
 # RUFF — linter + formatter (replaces flake8, isort, black, pydocstyle)
 # ==============================================================================
 [tool.ruff]
 line-length    = 120
-target-version = "py311"           # tell Ruff which syntax is legal
-src            = ["src", "tests"]  # helps isort distinguish first-party imports
+target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
+src            = ["src", "tests"]
 
-# ------------------------------------------------------------------------------
-# Formatter
-# ------------------------------------------------------------------------------
 [tool.ruff.format]
 indent-style              = "space"
 quote-style               = "double"
-skip-magic-trailing-comma = false   # preserve intentional trailing commas
+skip-magic-trailing-comma = false
 
-# ------------------------------------------------------------------------------
-# Linter — rule selection
-# ------------------------------------------------------------------------------
 [tool.ruff.lint]
 select = [
     "E",    # pycodestyle — base style errors
@@ -69,7 +102,7 @@ ignore = [
     # ---- docstring relaxations for NumPy convention -------------------------
     "D100",    # Module-level docstrings are optional (too noisy for scripts)
     "D203",    # "1 blank line before class docstring" — CONFLICTS with D211 (NumPy uses D211)
-    "D213",    # "Multi-line summary on second line" — CONFLICTS with D212 (NumPy uses D212)
+    "D213",    # "Multi-line summary on second line"   — CONFLICTS with D212 (NumPy uses D212)
 
     # ---- stylistic noise ----------------------------------------------------
     "E501",    # Line-too-long is handled by the formatter, not the linter
@@ -82,26 +115,15 @@ unfixable = [
     "F841",  # Never auto-remove unused local variables — might be intentional (debugging)
 ]
 
-# ------------------------------------------------------------------------------
-# Per-file rule overrides
-# ------------------------------------------------------------------------------
 [tool.ruff.lint.per-file-ignores]
-# Tests don't need full annotation coverage or docstrings on every helper
 "tests/**/*.py"   = ["ANN", "D"]
 "tests/*.py"      = ["ANN", "D"]
-# Standalone research / notebook-style scripts: relax docstrings, allow prints
 "scripts/**/*.py" = ["D", "T20"]
-# __init__.py re-exports don't need docstrings and unused-import is intentional
 "**/__init__.py"  = ["D", "F401"]
 
-# ------------------------------------------------------------------------------
-# isort — import ordering (via Ruff's I rules)
-# ------------------------------------------------------------------------------
 [tool.ruff.lint.isort]
-# Replace "mypackage" with your actual first-party package name(s)
-known-first-party         = ["mypackage"]
+known-first-party          = ["{{cookiecutter.package_name}}"]
 force-sort-within-sections = true
-# Standard section order: __future__ → stdlib → third-party → first-party → local
 section-order = [
     "future",
     "standard-library",
@@ -110,15 +132,9 @@ section-order = [
     "local-folder",
 ]
 
-# ------------------------------------------------------------------------------
-# Docstring convention — locked to NumPy
-# ------------------------------------------------------------------------------
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
-# ------------------------------------------------------------------------------
-# McCabe complexity — flag any function harder to follow than complexity 10
-# ------------------------------------------------------------------------------
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
@@ -126,20 +142,20 @@ max-complexity = 10
 # MYPY — static type checker
 # ==============================================================================
 [tool.mypy]
-python_version        = "3.11"
-strict                = true
+python_version         = "{{cookiecutter.python_version}}"
+strict                 = true
 ignore_missing_imports = true
 
 # Reconcile strict mode with ANN401 (Any is permitted where annotated explicitly)
-disallow_any_generics    = true    # List not OK, List[float] required
-disallow_any_explicit    = false   # Explicit Any is permitted (matches ANN401 allowance)
-disallow_any_unimported  = true    # No implicit Any from missing stubs
-warn_return_any          = true    # Still warn when Any leaks out of a return type
+disallow_any_generics   = true   # List not OK — List[float] required
+disallow_any_explicit   = false  # Explicit Any permitted (matches ANN401 allowance)
+disallow_any_unimported = true   # No implicit Any from missing stubs
+warn_return_any         = true   # Still warn when Any leaks out of a return type
 
 # Useful extras for scientific code
-warn_unreachable          = true   # Dead branches after narrowing (catches logic errors)
-show_error_codes          = true   # Include error codes so ignores can be precise
-pretty                    = true
+warn_unreachable = true   # Dead branches after type narrowing (catches logic errors)
+show_error_codes = true   # Include error codes so ignores can be precise
+pretty           = true
 
 # Per-module overrides — relax where stubs are genuinely unavailable
 [[tool.mypy.overrides]]
@@ -151,81 +167,73 @@ module = [
     "h5py.*",
 ]
 ignore_missing_imports = true
-disallow_untyped_defs  = false     # These libraries often lack complete stubs
+disallow_untyped_defs  = false   # These libraries often lack complete stubs
 
 # ==============================================================================
 # PYTEST
 # ==============================================================================
 [tool.pytest.ini_options]
-testpaths    = ["tests"]
-addopts      = [
-    "-ra",            # show short summary for all non-passing tests
-    "--strict-markers",   # fail if an unknown marker is used
-    "--tb=short",         # compact tracebacks
+testpaths = ["tests"]
+addopts   = [
+    "-ra",               # show short summary for all non-passing tests
+    "--strict-markers",  # fail if an unknown marker is used
+    "--tb=short",        # compact tracebacks
 ]
-# Declare custom markers here to keep --strict-markers happy
 markers = [
     "slow: marks tests as slow (deselect with -m 'not slow')",
     "integration: marks integration tests that hit external resources",
     "unit: marks fast, isolated unit tests",
 ]
-# Reproducible random seeds when using hypothesis or numpy.random
-# (set per-test via fixture; this just documents the convention)
 filterwarnings = [
-    "error",                          # promote all warnings to errors in tests
-    "ignore::DeprecationWarning:pkg_resources",  # suppress noisy third-party warnings
+    "error",
+    "ignore::DeprecationWarning:pkg_resources",
 ]
 
 # ==============================================================================
 # COVERAGE
 # ==============================================================================
 [tool.coverage.run]
-source    = ["src"]
-branch    = true                 # measure branch coverage, not just line coverage
-omit      = [
+source = ["src"]
+branch = true
+omit   = [
     "src/**/conftest.py",
     "src/**/__main__.py",
     "scripts/*",
 ]
 
 [tool.coverage.report]
-fail_under   = 80                # fail CI if total coverage drops below 80 %
+fail_under   = 80
 show_missing = true
 skip_covered = false
 exclude_lines = [
     "pragma: no cover",
-    "if TYPE_CHECKING:",          # type-only imports never execute at runtime
-    "if __name__ == .__main__.:", # entry-point guards
-    "raise NotImplementedError",  # abstract method stubs
-    "@overload",                  # typing overloads are never called directly
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "@overload",
 ]
 
 # ==============================================================================
-# MKDOCS (docs/mkdocs.yml is the canonical config; replicate key choices here
-# for discoverability.  Actual MkDocs config must live in docs/mkdocs.yml.)
+# MKDOCS — reference notes (canonical config lives in docs/mkdocs.yml)
 # ==============================================================================
-# Reminder of the agreed stack:
-#   theme        : Material for MkDocs, dark palette ("slate")
-#   plugins      : mkdocstrings[python], search
-#   docstring    : numpy  (parsed by griffe)
-#   math         : MathJax 3 via custom_js in mkdocs.yml
-#   source links : enabled via mkdocstrings show_source = true
+# Stack:
+#   theme      : Material for MkDocs, dark palette ("slate")
+#   plugins    : mkdocstrings[python], search
+#   docstring  : numpy (parsed by griffe)
+#   math       : MathJax 3 via extra_javascript in docs/mkdocs.yml
+#   src links  : enabled via mkdocstrings show_source = true
 #
-# Raw docstrings (r"""...""") MUST be used for any docstring containing
-# LaTeX so that backslashes are not consumed by Python before MkDocs sees them.
+# Raw docstrings (r"""...""") MUST be used for any docstring containing LaTeX
+# so that backslashes are not consumed by Python before MkDocs sees them.
 #
-# Example of a correctly formatted physics docstring:
+# Canonical docstring example:
 #
 #   def hamiltonian(q: np.ndarray, p: np.ndarray) -> float:
 #       r"""Compute the classical Hamiltonian :math:`H(q, p)`.
 #
-#       The Hamiltonian is defined as
-#
 #       .. math::
 #
 #           H(q, p) = \frac{p^2}{2m} + V(q)
-#
-#       where :math:`V(q)` is the potential energy surface.
 #
 #       Parameters
 #       ----------
@@ -241,6 +249,6 @@ exclude_lines = [
 #
 #       Notes
 #       -----
-#       This function assumes SI units throughout.  For atomic units
-#       set ``m = 1`` and rescale :math:`V`.
+#       Assumes SI units throughout.  For atomic units set ``m = 1``
+#       and rescale :math:`V`.
 #       """
