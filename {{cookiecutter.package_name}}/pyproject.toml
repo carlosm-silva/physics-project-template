@@ -62,6 +62,7 @@ docs = [
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.25",
     "mkdocs-gen-files>=0.5",
+    "mkdocs-autorefs>=1.0",
 ]
 
 # ==============================================================================
