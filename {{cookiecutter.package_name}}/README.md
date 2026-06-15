@@ -8,6 +8,10 @@ cd {{cookiecutter.package_name}}
 just bootstrap
 conda activate {{cookiecutter.package_name}}
 
+just check
+
+gh repo create {{cookiecutter.package_name}} --public --source=. --push
+
 # one-time setup — enable GitHub Pages on the new repo. Wait for the docs workflow to complete
 gh api repos/carlosm-silva/{{cookiecutter.package_name}}/pages \
   --method POST \
