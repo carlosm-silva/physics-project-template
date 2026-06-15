@@ -33,7 +33,7 @@ test *args:
 
 # serve docs locally with live reload
 docs:
-    mkdocs serve --config-file docs/mkdocs.yml
+    mkdocs serve --config-file mkdocs.yml
 
 # create a timestamped run directory and launch a simulation
 run config:
