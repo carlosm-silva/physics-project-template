@@ -3,7 +3,7 @@
 ## Setup
 
 ```bash
-cookiecutter gh:yourusername/physics-project-template
+cookiecutter gh:carlosm-silva/physics-project-template
 cd {{cookiecutter.package_name}}
 just bootstrap
 conda activate {{cookiecutter.package_name}}
