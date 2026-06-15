@@ -22,7 +22,6 @@ jobs:
           environment-file: environment.yml
           auto-activate-base: false
           miniforge-version: latest
-          conda-solver: libmamba
 
       - name: Ruff lint
         shell: bash -el {0}
