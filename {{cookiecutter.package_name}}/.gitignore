@@ -1,9 +1,31 @@
+# Project outputs and data
 outputs/
 *.h5
 *.fits
+
+# Python caches and bytecode
 __pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Tooling caches
 .mypy_cache/
 .ruff_cache/
+.pytest_cache/
+
+# Coverage
+.coverage
+
+# Build artifacts
+build/
 dist/
 *.egg-info/
-.ipynb_checkpoints/
+
+# Docs build output
+site/
+
+# Local environment / secrets
+.env
+
+# OS files
+.DS_Store
