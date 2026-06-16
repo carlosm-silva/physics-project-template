@@ -1,5 +1,7 @@
 # {{cookiecutter.project_name}}
 
+📖 **[Documentation](https://carlosm-silva.github.io/{{cookiecutter.package_name}}/)**
+
 ## Setup
 
 ```bash

@@ -63,6 +63,8 @@ docs = [
     "mkdocstrings[python]>=0.25",
     "mkdocs-gen-files>=0.5",
     "mkdocs-autorefs>=1.0",
+    "mkdocs-literate-nav>=0.6",
+    "mkdocs-section-index>=0.3",
 ]
 
 # ==============================================================================

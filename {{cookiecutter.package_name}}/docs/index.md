@@ -1,3 +1,6 @@
-# {{cookiecutter.project_name}}
+--8<-- "README.md"
 
-Documentation generated from source docstrings via mkdocstrings.
+## Documentation
+
+- [Usage](usage.md)
+- [API Reference](reference/)

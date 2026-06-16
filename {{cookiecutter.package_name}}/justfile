@@ -35,6 +35,10 @@ test *args:
 docs:
     mkdocs serve --config-file mkdocs.yml
 
+# strict build — fails on broken refs, missing nav entries, or bad math
+docs-build:
+    mkdocs build --strict --config-file mkdocs.yml
+
 # create a timestamped run directory and launch a simulation
 run config:
     python scripts/run_simulation.py --config configs/{{"{{"}}config{{"}}"}}.toml
